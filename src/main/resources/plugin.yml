@@ -1,5 +1,5 @@
 name: Playtime
-main: com.nuclearw.Playtime.playtime
+main: com.nuclearw.playtime.Playtime
 version: ${project.version}
 author: NuclearW
 description: Playtime allows you to track a per-session and total playtime for users
