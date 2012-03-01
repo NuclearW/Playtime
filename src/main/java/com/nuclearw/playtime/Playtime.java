@@ -32,9 +32,7 @@ public class Playtime extends JavaPlugin {
 	static File versionFile = new File(mainDirectory + File.separator + "VERSION");
 	static File languageFile = new File(mainDirectory + File.separator + "lang");
 
-	private final PlaytimePluginListener pluginListener = new PlaytimePluginListener(this);
 	private final PlaytimePlayerListener playerListener = new PlaytimePlayerListener(this);
-	private final PlaytimePermissionsHandler permissionsHandler = new PlaytimePermissionsHandler(this);
 	
 	Logger log = Logger.getLogger("Minecraft");
 
@@ -85,14 +83,11 @@ public class Playtime extends JavaPlugin {
 		this.language[9] = prop.getProperty("second");
 		this.language[10] = prop.getProperty("seconds");
 		
-		PlaytimePermissionsHandler.initialize(this.getServer());
-		
 		PluginManager pluginManager = getServer().getPluginManager();
 
 		pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pluginManager.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
-		pluginManager.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		
 		log.addHandler(new Handler() {
         	public void publish(LogRecord logRecord) {
@@ -239,10 +234,6 @@ public class Playtime extends JavaPlugin {
 		if(addTo == null) addTo = Long.parseLong("0");
 		totalTime.put(player, add + addTo.longValue());
 		joinTime.remove(player);
-	}
-	
-	public boolean hasPermission(Player player, String permission) {
-		return permissionsHandler.hasPermission(player, permission);
 	}
 	
 	public String getElapsedTimeString(long diff) {
