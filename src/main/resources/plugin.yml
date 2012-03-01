@@ -1,0 +1,38 @@
+name: Playtime
+main: com.nuclearw.Playtime.playtime
+version: ${project.version}
+author: NuclearW
+description: Playtime allows you to track a per-session and total playtime for users
+commands:
+   playtime:
+      description: See your or another player's playtime.
+      usage: |
+         /<command> (player)
+   totalplaytime:
+      description: See your or another player's total playtime.
+      useage: |
+         /<command> (player)
+permissions:
+    playtime.*:
+        description: Gives access to all playtime commands
+        children:
+            playtime.self: true
+            playtime.other: true
+            playtime.total.*: true
+    playtime.total.*:
+        description: Gives access to all features of totalplaytime
+        children:
+            playtime.total.self: true
+            playtime.total.other: true
+    playtime.self:
+        description: Allows you to check your own playtime
+        default: op
+    playtime.other:
+        description: Allows you to check another user's playtime
+        default: op
+    playtime.total.self:
+        description: Allows you to check your own total playtime
+        default: op
+    playtime.total.other:
+        description: Allows you to check another user's total playtime
+        default: op

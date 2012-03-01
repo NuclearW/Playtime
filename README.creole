@@ -1,0 +1,27 @@
+== Playtime
+
+Playtime allows you to track a per-session and total playtime for users
+
+=== Commands
+
+* /playtime (player)
+** //See your or another player's playtime//
+* /totalplaytime (player)
+** //See your or another player's total playtime//
+
+=== Permissions
+
+* playtime.self
+** //Allows you to check your own playtime//
+* playtime.other
+** //Allows you to check another user's playtime//
+* playtime.total.self
+** //Allows you to check your own total playtime//
+* playtime.total.other
+** //Allows you to check another user's total playtime//
+
+All permissions default to **op**
+
+=== Compiling
+
+Maven 3 is required to compile Playtime
