@@ -31,20 +31,20 @@ public class Playtime extends JavaPlugin {
 	static File languageFile = new File(mainDirectory + File.separator + "lang");
 
 	private final PlaytimePlayerListener playerListener = new PlaytimePlayerListener(this);
-	
+
 	Logger log = Logger.getLogger("Minecraft");
 
 	Properties prop = new Properties();
-	
+
 	String[] language = new String[11];
-	
+
 	public HashMap<String, Long> joinTime = new HashMap<String, Long>();
 	public HashMap<String, Long> totalTime = new HashMap<String, Long>();
-	
+
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
 		new File(mainDirectory).mkdir();
-		
+
 		if(!versionFile.exists()) {
 			updateVersion();
 		} else {
@@ -56,11 +56,11 @@ public class Playtime extends JavaPlugin {
 			if(vnum.equalsIgnoreCase("0.4")) updateVersion();
 			if(vnum.equalsIgnoreCase("0.5")) updateVersion();
 		}
-		
+
 		if(!languageFile.exists()) tryMakeLangFile();
-		
+
 		tryLoadLangFile();
-		
+
 		if(!prop.containsKey("online") || !prop.containsKey("online-other") || !prop.containsKey("not-online")
 				 || !prop.containsKey("day") || !prop.containsKey("days") || !prop.containsKey("hour") || !prop.containsKey("hours")
 				 || !prop.containsKey("minute") || !prop.containsKey("minutes") || !prop.containsKey("second") || !prop.containsKey("seconds")) {
@@ -80,11 +80,11 @@ public class Playtime extends JavaPlugin {
 		this.language[8] = prop.getProperty("minutes");
 		this.language[9] = prop.getProperty("second");
 		this.language[10] = prop.getProperty("seconds");
-		
+
 		PluginManager pluginManager = getServer().getPluginManager();
 
 		pluginManager.registerEvents(playerListener, this);
-		
+
 		log.addHandler(new Handler() {
         	public void publish(LogRecord logRecord) {
         		String mystring = logRecord.getMessage();
@@ -100,7 +100,7 @@ public class Playtime extends JavaPlugin {
         	public void close() {
         	}
         });
-		
+
 		if(getServer().getOnlinePlayers().length != 0) {
 			if(new File(tempFile).exists()) {
 				try {
@@ -114,7 +114,7 @@ public class Playtime extends JavaPlugin {
 		} else {
 			new File(tempFile).delete();
 		}
-		
+
 		if(new File(totalFile).exists()) {
 			try {
 				ObjectInputStream obj = new ObjectInputStream(new FileInputStream(totalFile));
@@ -123,9 +123,9 @@ public class Playtime extends JavaPlugin {
 			} catch (IOException e) { e.printStackTrace();
 			} catch (ClassNotFoundException e) { e.printStackTrace(); }
 		}
-		
+
 		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new PlaytimeWriteTimer(this), 6000L, 6000L);
-		
+
 		this.log.info("[Playtime] Playtime version "+this.getDescription().getVersion()+" loaded.");
 	}
 
@@ -147,7 +147,7 @@ public class Playtime extends JavaPlugin {
 			totalTime.put(player, add + addTo.longValue());
 		}
 		joinTime.clear();
-		
+
 		try {
 			new File(totalFile).createNewFile();
 			ObjectOutputStream obj = new ObjectOutputStream(new FileOutputStream(totalFile));
@@ -156,10 +156,10 @@ public class Playtime extends JavaPlugin {
 		} catch (FileNotFoundException e) { e.printStackTrace();
 		} catch (IOException e) { e.printStackTrace(); }
 		totalTime.clear();
-		
+
 		this.log.info("[Playtime] Playtime version "+this.getDescription().getVersion()+" unloaded.");
 	}
-	
+
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("playtime")) {
 			if(args.length == 0) {
@@ -218,11 +218,11 @@ public class Playtime extends JavaPlugin {
 		}
 		return true;
 	}
-	
+
 	public void onJoin(Player player) {
 		joinTime.put(player.getName(), System.currentTimeMillis());
 	}
-	
+
 	public void onLeave(String player) {
 		if(!joinTime.containsKey(player)) return;
 		long add = System.currentTimeMillis() - joinTime.get(player).longValue();
@@ -231,7 +231,7 @@ public class Playtime extends JavaPlugin {
 		totalTime.put(player, add + addTo.longValue());
 		joinTime.remove(player);
 	}
-	
+
 	public String getElapsedTimeString(long diff) {
 		long secondInMillis = 1000;
 		long minuteInMillis = secondInMillis * 60;
@@ -247,15 +247,15 @@ public class Playtime extends JavaPlugin {
 		long elapsedMinutes = diff / minuteInMillis;
 		diff = diff % minuteInMillis;
 		long elapsedSeconds = diff / secondInMillis;
-		
+
 		String compose = " ";
-		
+
 		if(elapsedDays == 1) {
 			compose = compose + "1 " +  this.language[3] + ", ";
 		} else if(elapsedDays > 1) {
 			compose = compose + Long.toString(elapsedDays) + " " + language[4]+ ", ";
 		}
-		
+
 		if(elapsedHours == 1) {
 			compose = compose + "1 " +  this.language[5]+ ", ";
 		} else if(elapsedHours > 1) {
@@ -273,22 +273,22 @@ public class Playtime extends JavaPlugin {
 		} else if(elapsedSeconds > 1) {
 			compose = compose + Long.toString(elapsedSeconds) + " " + language[10]+ ".";
 		}
-		
+
 		return compose;
 	}
-	
+
 	public String getElapsedTimeString(long currentTime, String playerName) {
 		//log.info("Current time: " + Long.toString(currentTime));
 		//log.info("Join time: " + Long.toString(joinTime.get(playerName).longValue()));
 		long diff = currentTime - joinTime.get(playerName).longValue();
 		return getElapsedTimeString(diff);
 	}
-	
+
 	public long getElapsedTimeLong(long currentTime, String playerName) {
 		long diff = currentTime - joinTime.get(playerName).longValue();
 		return diff;
 	}
-	
+
 	public void tryLoadLangFile() {
 		FileInputStream langin;
 		try {
@@ -301,7 +301,7 @@ public class Playtime extends JavaPlugin {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void tryMakeLangFile() {
 		try {
 			languageFile.createNewFile();
@@ -325,7 +325,7 @@ public class Playtime extends JavaPlugin {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void updateVersion() {
 		try {
 			versionFile.createNewFile();
@@ -352,10 +352,10 @@ public class Playtime extends JavaPlugin {
 		} finally {
 			if (f != null) try { f.close(); } catch (IOException ignored) { }
 		}
-		
+
 		return new String(buffer);
 	}
-	
+
     public boolean isPlayer(CommandSender sender) {
         return sender != null && sender instanceof Player;
     }
