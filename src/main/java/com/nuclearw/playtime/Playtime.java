@@ -168,11 +168,11 @@ public class Playtime extends JavaPlugin {
 		if(cmd.getName().equalsIgnoreCase("playtime")) {
 			if(args.length == 0) {
 				if(!isPlayer(sender)) return false;
-				if(!hasPermission(((Player)sender), "playtime.self")) return true;
+				if(!((Player)sender).hasPermission("playtime.self")) return true;
 				String elapsedTimeString = getElapsedTimeString(System.currentTimeMillis(), ((Player) sender).getName());
 				sender.sendMessage(this.language[0] + elapsedTimeString);
 			} else if(args.length == 1) {
-				if(isPlayer(sender) && !hasPermission(((Player)sender), "playtime.other")) return true;
+				if(isPlayer(sender) && !((Player)sender).hasPermission("playtime.other")) return true;
 				if(getServer().getPlayer(args[0]) == null) {
 					String parsedNotOnline = this.language[2].replace("<player>", args[0]);
 					sender.sendMessage(parsedNotOnline);
@@ -186,7 +186,7 @@ public class Playtime extends JavaPlugin {
 		if(cmd.getName().equalsIgnoreCase("totalplaytime")) {
 			if(args.length == 0) {
 				if(!isPlayer(sender)) return false;
-				if(!hasPermission(((Player)sender), "playtime.total.self")) return true;
+				if(!((Player)sender).hasPermission("playtime.total.self")) return true;
 				String elapsedTimeString = null;
 				if(totalTime.get(((Player) sender).getName()) == null) {
 					elapsedTimeString = getElapsedTimeString(System.currentTimeMillis(), ((Player) sender).getName());
@@ -198,7 +198,7 @@ public class Playtime extends JavaPlugin {
 				}
 				sender.sendMessage(this.language[0] + elapsedTimeString);
 			} else if(args.length == 1) {
-				if(isPlayer(sender) && !hasPermission(((Player)sender), "playtime.total.other")) return true;
+				if(isPlayer(sender) && !((Player)sender).hasPermission("playtime.total.other")) return true;
 				if(getServer().getPlayer(args[0]) == null && !totalTime.containsKey(args[0])) {
 					String parsedNotOnline = this.language[2].replace("<player>", args[0]);
 					sender.sendMessage(parsedNotOnline);
